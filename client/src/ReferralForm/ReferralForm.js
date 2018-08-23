@@ -1,13 +1,13 @@
 import React, { Component } from "react";
-import { Form, Text, Checkbox, RadioGroup, Radio } from "informed";
 import FirstStep from "./Steps/FirstStep";
 import SecondStep from "./Steps/SecondStep";
 import ThirdStep from "./Steps/ThirdStep";
 import FourthStep from "./Steps/FourthStep";
 import FifthStep from "./Steps/FifthStep";
+import axios from "axios";
 
 export default class ReferralForm extends Component {
-  state = { step: 0, values: { gender: null } };
+  state = { step: 3, values: { gender: null } };
 
   updateState = newValues => {
     this.setState({
@@ -19,7 +19,36 @@ export default class ReferralForm extends Component {
   };
 
   handleSubmit = () => {
-    console.log(this.formApi.getState().values);
+    const {
+      height,
+      beard,
+      adjective1,
+      adjective2,
+      adjective3,
+      adjective4,
+      adjective5,
+      adjective6,
+      bestQuality,
+      haunt
+    } = this.state.values;
+
+    axios
+      .post("/api/form", {
+        height,
+        beard,
+        adjective1,
+        adjective2,
+        adjective3,
+        adjective4,
+        adjective5,
+        adjective6,
+        bestQuality,
+        haunt
+      })
+      .then(res => {
+        console.log(res);
+        console.log(res.data);
+      });
   };
 
   nextStep = () => {
@@ -47,6 +76,7 @@ export default class ReferralForm extends Component {
       case 3:
         return (
           <FourthStep
+            values={this.state.values}
             nextStep={this.nextStep}
             updateState={this.updateState}
             gender={this.state.values.gender}

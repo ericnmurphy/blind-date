@@ -58,16 +58,19 @@ export default class ThirdStep extends Component {
               <label>Click all that apply</label>
 
               <div className="checkbox">
-                <Checkbox field="lostSoul" id="lost-soul" />
+                <Checkbox field="socioeconomic.Lost Soul" id="lost-soul" />
                 <label htmlFor="lost-soul">Lost Soul</label>
               </div>
               <div className="checkbox">
-                <Checkbox field="starvingArtist" id="starving-artist" />
-                <label htmlFor="starving-artist">Starving artist</label>
+                <Checkbox
+                  field="socioeconomic.Starving Artist"
+                  id="starving-artist"
+                />
+                <label htmlFor="starving-artist">Starving Artist</label>
               </div>
               <div className="checkbox">
                 <Checkbox
-                  field="overeducatedAndUnderpaid"
+                  field="socioeconomic.Overeducated and Underpaid"
                   id="overeducated-and-underpaid"
                 />
                 <label htmlFor="overeducated-and-underpaid">
@@ -75,25 +78,34 @@ export default class ThirdStep extends Component {
                 </label>
               </div>
               <div className="checkbox">
-                <Checkbox field="devotedEmployee" id="devoted-employee" />
+                <Checkbox
+                  field="socioeconomic.Devoted Employee"
+                  id="devoted-employee"
+                />
                 <label htmlFor="devoted-employee">Devoted Employee</label>
               </div>
               <div className="checkbox">
-                <Checkbox field="doctorLawyer" id="doctor-lawyer" />
+                <Checkbox
+                  field="socioeconomic.Doctor, Lawyer, Other Mom-Approved Professional"
+                  id="doctor-lawyer"
+                />
                 <label htmlFor="doctor-lawyer">
                   Doctor, Lawyer, Other Mom-Approved Professional
                 </label>
               </div>
               <div className="checkbox">
-                <Checkbox field="boss" id="boss" />
+                <Checkbox field="socioeconomic.Boss" id="boss" />
                 <label htmlFor="boss">Boss</label>
               </div>
               <div className="checkbox">
-                <Checkbox field="trustFunded" id="trust-funded" />
+                <Checkbox
+                  field="socioeconomic.Trust Funded"
+                  id="trust-funded"
+                />
                 <label htmlFor="trust-funded">Trust Funded</label>
               </div>
               <div className="checkbox">
-                <Checkbox field="tycoon" id="tycoon" />
+                <Checkbox field="socioeconomic.Tycoon" id="tycoon" />
                 <label htmlFor="tycoon">Tycoon</label>
               </div>
             </div>
