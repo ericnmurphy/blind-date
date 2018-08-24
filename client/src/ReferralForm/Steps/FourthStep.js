@@ -88,6 +88,7 @@ export default class FourthStep extends Component {
                 id="association"
                 validateOnBlur
                 validate={validate}
+                autoFocus
               />
             </div>
             <div className="field-radio">
@@ -95,6 +96,7 @@ export default class FourthStep extends Component {
               <RadioGroup field="height" validateOnChange validate={validate}>
                 <div className="radio">
                   <Radio
+                    field="height"
                     value="short"
                     className={formApi.getError("height")}
                     id="radio-short"
@@ -103,6 +105,7 @@ export default class FourthStep extends Component {
                 </div>
                 <div className="radio">
                   <Radio
+                    field="height"
                     value="medium"
                     className={formApi.getError("height")}
                     id="radio-medium"
@@ -111,6 +114,7 @@ export default class FourthStep extends Component {
                 </div>
                 <div className="radio">
                   <Radio
+                    field="height"
                     value="tall"
                     className={formApi.getError("height")}
                     id="radio-tall"
@@ -125,6 +129,7 @@ export default class FourthStep extends Component {
                 <RadioGroup field="beard" validateOnChange validate={validate}>
                   <div className="radio">
                     <Radio
+                      field="beard"
                       value="cleanShaven"
                       className={formApi.getError("beard")}
                       id="radio-clean-shaven"
@@ -133,6 +138,7 @@ export default class FourthStep extends Component {
                   </div>
                   <div className="radio">
                     <Radio
+                      field="beard"
                       value="stubble"
                       className={formApi.getError("beard")}
                       id="radio-stubble"
@@ -141,6 +147,7 @@ export default class FourthStep extends Component {
                   </div>
                   <div className="radio">
                     <Radio
+                      field="beard"
                       value="mustache"
                       className={formApi.getError("beard")}
                       id="radio-mustache"
@@ -149,6 +156,7 @@ export default class FourthStep extends Component {
                   </div>
                   <div className="radio">
                     <Radio
+                      field="beard"
                       value="goatee"
                       className={formApi.getError("beard")}
                       id="radio-goatee"
@@ -157,6 +165,7 @@ export default class FourthStep extends Component {
                   </div>
                   <div className="radio">
                     <Radio
+                      field="beard"
                       value="bearded"
                       className={formApi.getError("beard")}
                       id="radio-bearded"

@@ -30,6 +30,7 @@ export default class SecondStep extends Component {
                 id="first-name"
                 validateOnBlur
                 validate={validate}
+                autoFocus
               />
             </div>
             <div className="field">
