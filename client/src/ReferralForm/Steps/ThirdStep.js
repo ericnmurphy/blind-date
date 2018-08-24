@@ -22,7 +22,7 @@ export default class ThirdStep extends Component {
         {({ formApi }) => (
           <React.Fragment>
             <h3>Now tell us about your friend.</h3>
-            <div className="field-radio">
+            <div className="short-radio">
               <label>M or F?</label>
               <RadioGroup field="gender" validate={validate}>
                 <div className="radio">
@@ -43,7 +43,7 @@ export default class ThirdStep extends Component {
                 </div>
               </RadioGroup>
             </div>
-            <div className="field">
+            <div className="short-field">
               <label htmlFor="age">Age</label>
               <Text
                 type="number"

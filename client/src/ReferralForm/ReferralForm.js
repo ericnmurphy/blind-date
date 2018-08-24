@@ -4,10 +4,9 @@ import SecondStep from "./Steps/SecondStep";
 import ThirdStep from "./Steps/ThirdStep";
 import FourthStep from "./Steps/FourthStep";
 import FifthStep from "./Steps/FifthStep";
-import axios from "axios";
 
 export default class ReferralForm extends Component {
-  state = { step: 3, values: { gender: null } };
+  state = { step: 0, values: { gender: null } };
 
   updateState = newValues => {
     this.setState({
@@ -16,39 +15,6 @@ export default class ReferralForm extends Component {
         ...newValues
       }
     });
-  };
-
-  handleSubmit = () => {
-    const {
-      height,
-      beard,
-      adjective1,
-      adjective2,
-      adjective3,
-      adjective4,
-      adjective5,
-      adjective6,
-      bestQuality,
-      haunt
-    } = this.state.values;
-
-    axios
-      .post("/api/form", {
-        height,
-        beard,
-        adjective1,
-        adjective2,
-        adjective3,
-        adjective4,
-        adjective5,
-        adjective6,
-        bestQuality,
-        haunt
-      })
-      .then(res => {
-        console.log(res);
-        console.log(res.data);
-      });
   };
 
   nextStep = () => {

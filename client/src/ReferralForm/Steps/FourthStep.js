@@ -8,8 +8,6 @@ export default class FourthStep extends Component {
   };
 
   handleSubmit() {
-    console.log("success");
-
     const {
       firstName,
       lastName,
@@ -18,7 +16,6 @@ export default class FourthStep extends Component {
       website,
       gender,
       age,
-      socioeconomic,
       association,
       height,
       beard,
@@ -31,6 +28,12 @@ export default class FourthStep extends Component {
       bestQuality,
       haunt
     } = this.props.values;
+
+    const socioObject = this.props.values.socioeconomic;
+    const keys = Object.keys(socioObject);
+    const socioeconomic = keys.filter(function(key) {
+      return socioObject[key];
+    });
 
     axios
       .post("/api/form", {
@@ -57,7 +60,7 @@ export default class FourthStep extends Component {
       .then(res => {
         console.log(res);
         console.log(res.data);
-        // this.props.nextStep();
+        this.props.nextStep();
       });
   }
 
