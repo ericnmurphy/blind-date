@@ -28,21 +28,21 @@ export default class ThirdStep extends Component {
                 <div className="radio">
                   <Radio
                     field="gender"
-                    value="male"
+                    value="man"
                     className={formApi.getError("gender")}
-                    id="radio-male"
+                    id="radio-man"
                     autoFocus
                   />
-                  <label htmlFor="radio-male">M</label>
+                  <label htmlFor="radio-man">M</label>
                 </div>
                 <div className="radio">
                   <Radio
                     field="gender"
-                    value="female"
+                    value="woman"
                     className={formApi.getError("gender")}
-                    id="radio-female"
+                    id="radio-woman"
                   />
-                  <label htmlFor="radio-female">F</label>
+                  <label htmlFor="radio-woman">F</label>
                 </div>
               </RadioGroup>
             </div>

@@ -6,7 +6,7 @@ import FourthStep from "./Steps/FourthStep";
 import FifthStep from "./Steps/FifthStep";
 
 export default class ReferralForm extends Component {
-  state = { step: 0, values: { gender: null } };
+  state = { step: 0, values: { gender: null }, beard: null, bestQuality: null };
 
   updateState = newValues => {
     this.setState({

@@ -60,7 +60,7 @@ export default class FourthStep extends Component {
       .then(res => {
         console.log(res);
         console.log(res.data);
-        this.props.nextStep();
+        // this.props.nextStep();
       });
   }
 
@@ -123,7 +123,7 @@ export default class FourthStep extends Component {
                 </div>
               </RadioGroup>
             </div>
-            {this.props.gender === "male" ? (
+            {this.props.gender === "man" ? (
               <div className="field-radio">
                 <p>Choose one</p>
                 <RadioGroup field="beard" validateOnChange validate={validate}>
@@ -178,7 +178,7 @@ export default class FourthStep extends Component {
             <div className="field-block">
               <label>
                 6 adjectives that describe{" "}
-                {this.props.gender === "male" ? "him" : "her"}
+                {this.props.gender === "man" ? "him" : "her"}
               </label>
               <div className="block">
                 <Text
@@ -235,7 +235,7 @@ export default class FourthStep extends Component {
                 />
               </div>
             </div>
-            {this.props.gender === "male" ? null : (
+            {this.props.gender === "man" ? null : (
               <div className="inline-field">
                 <label htmlFor="best-quality">
                   Her best physical quality is
@@ -252,7 +252,7 @@ export default class FourthStep extends Component {
             <div className="inline-field">
               <label htmlFor="haunt">
                 You’re most likely to find{" "}
-                {this.props.gender === "male" ? "him" : "her"}
+                {this.props.gender === "man" ? "him" : "her"}
               </label>
               <Text
                 field="haunt"
