@@ -4,9 +4,31 @@ import SecondStep from "./Steps/SecondStep";
 import ThirdStep from "./Steps/ThirdStep";
 import FourthStep from "./Steps/FourthStep";
 import FifthStep from "./Steps/FifthStep";
+import axios from "axios";
 
 export default class ReferralForm extends Component {
-  state = { step: 0, values: { gender: null }, beard: null, bestQuality: null };
+  state = {
+    step: 0,
+    values: { gender: null }
+  };
+
+  componentDidMount() {
+    axios
+      .get("/api/email", { params: { id: this.props.match.params.id } })
+      .then(res => {
+        console.log(res.data);
+        this.setState({
+          authenticated: true,
+          values: { email: res.data.email }
+        });
+      })
+      .catch(err => {
+        this.setState({
+          authenticated: false,
+          errorMessage: err.response.data
+        });
+      });
+  }
 
   updateState = newValues => {
     this.setState({
@@ -54,6 +76,14 @@ export default class ReferralForm extends Component {
   }
 
   render() {
-    return <React.Fragment>{this.renderStep(this.state.step)}</React.Fragment>;
+    return (
+      <React.Fragment>
+        {this.state.authenticated === undefined && <h3>Loading...</h3>}
+        {this.state.authenticated === true && this.renderStep(this.state.step)}
+        {this.state.authenticated === false && (
+          <h3>{this.state.errorMessage}</h3>
+        )}
+      </React.Fragment>
+    );
   }
 }

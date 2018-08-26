@@ -1,78 +1,65 @@
 const mongoose = require("mongoose");
 
 const UserSchema = new mongoose.Schema({
+  email: {
+    type: String
+  },
   firstName: {
-    type: String,
-    required: true
+    type: String
   },
   lastName: {
-    type: String,
-    required: true
+    type: String
   },
   profession: {
-    type: String,
-    required: true
+    type: String
   },
   company: {
-    type: String,
-    required: true
+    type: String
   },
   website: {
-    type: String,
-    required: true
+    type: String
   },
   gender: {
-    type: String,
-    required: true
+    type: String
   },
   age: {
-    type: Number,
-    required: true
+    type: Number
   },
   socioeconomic: {
     type: Array
   },
   association: {
-    type: String,
-    required: true
+    type: String
   },
   height: {
-    type: String,
-    required: true
+    type: String
   },
   beard: {
     type: String
   },
   adjective1: {
-    type: String,
-    required: true
+    type: String
   },
   adjective2: {
-    type: String,
-    required: true
+    type: String
   },
   adjective3: {
-    type: String,
-    required: true
+    type: String
   },
   adjective4: {
-    type: String,
-    required: true
+    type: String
   },
   adjective5: {
-    type: String,
-    required: true
+    type: String
   },
   adjective6: {
-    type: String,
-    required: true
+    type: String
   },
   bestQuality: {
     type: String
   },
   haunt: {
-    type: String,
-    required: true
+    type: String
   }
 });
 

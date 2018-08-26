@@ -9,6 +9,7 @@ const Match = require("./models/Match.js");
 
 const app = express();
 const port = process.env.PORT || 5000;
+const siteUrl = "http://localhost:3000/";
 
 mongoose.Promise = global.Promise;
 
@@ -22,6 +23,16 @@ mongoose
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
+//nodemailer setup
+const transporter = nodemailer.createTransport({
+  host: "smtp.ethereal.email",
+  port: 587,
+  auth: {
+    user: "d3dknprfuzhco4pu@ethereal.email",
+    pass: "2dvqG9MMGNMGXFT97x"
+  }
+});
 
 // Create match function
 
@@ -122,18 +133,81 @@ app.post("/api/form", (req, res) => {
   });
 });
 
+//send email invite
+sendInvite = user => {
+  const inviteText = `Hi.\n\nWe heard you have someone to set up.\n\nCopy and paste the URL. ${siteUrl}:${
+    user.id
+  }`;
+
+  const inviteHtml = `
+  <p>Hi.</p>
+  <p>We heard you have someone to set up.</p>
+  <p><span style="background-color: yellow"><a href="${siteUrl}:${
+    user.id
+  }">Click here.</a></span></p>
+  `;
+
+  // setup email data with unicode symbols
+  let mailOptions = {
+    from: '"Blind Date" <d3dknprfuzhco4pu@ethereal.email>', // sender address
+    to: user.email, // list of receivers
+    subject: "Blind Date Invite", // Subject line
+    text: inviteText, // plain text body
+    html: inviteHtml // html body
+  };
+
+  // send mail with defined transport object
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      return console.log(error);
+    }
+    console.log("Message sent: %s", info.messageId);
+    // Preview only available when sending through an Ethereal account
+    console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+
+    // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+    // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+  });
+};
+
+//send invite to matcher
+
+app.post("/api/invite", (req, res) => {
+  console.log(req.body);
+
+  const user = new User(req.body);
+  console.log(user);
+  user.save(function(err, newUser) {
+    res.send("saved to database");
+    sendInvite(newUser);
+  });
+});
+
+// get email from user id
+
+app.get("/api/email", (req, res) => {
+  console.log(req.query.id);
+  User.findById(req.query.id, "email firstName", function(error, match) {
+    if (error) {
+      res.status(400);
+      res.send(
+        "There's no user with this ID. Check the URL from your email and try again."
+      );
+    } else {
+      console.log(match);
+      if (match.firstName) {
+        res.status(400);
+        res.send("You've already set up your friend.");
+      } else {
+        res.json(match);
+      }
+    }
+  });
+});
+
 //send email
 
 app.post("/api/send", (req, res) => {
-  const transporter = nodemailer.createTransport({
-    host: "smtp.ethereal.email",
-    port: 587,
-    auth: {
-      user: "d3dknprfuzhco4pu@ethereal.email",
-      pass: "2dvqG9MMGNMGXFT97x"
-    }
-  });
-
   const output1 = `
   <p>${req.body.match.user1.message}</p>
   <p><a href="">Message ${req.body.match.user2.name} to set up the date.</a></p>
