@@ -60,7 +60,7 @@ export default class FourthStep extends Component {
       .then(res => {
         console.log(res);
         console.log(res.data);
-        // this.props.nextStep();
+        this.props.nextStep();
       });
   }
 

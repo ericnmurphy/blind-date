@@ -203,6 +203,24 @@ button {
   cursor: pointer;
 }
 
+.match-textareas {
+  display: flex;
+}
+
+.match-textareas textarea:first-child {
+  margin-left: 0;
+}
+
+.match-textareas textarea:last-child {
+  margin-right: 0;
+}
+
+.match-textareas textarea {
+  flex: 1;
+  margin: 0 10px;
+  min-height: 200px;
+}
+
 /* responsive */
 
 @media (max-width: 768px) {

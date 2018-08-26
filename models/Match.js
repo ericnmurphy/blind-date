@@ -2,20 +2,40 @@ const mongoose = require("mongoose");
 
 const MatchSchema = new mongoose.Schema({
   user1: {
-    type: String,
-    required: true
+    id: {
+      type: String,
+      required: true
+    },
+    name: {
+      type: String,
+      required: true
+    },
+    email: {
+      type: String,
+      required: true
+    },
+    message: {
+      type: String,
+      required: true
+    }
   },
   user2: {
-    type: String,
-    required: true
-  },
-  message1: {
-    type: String,
-    required: true
-  },
-  message2: {
-    type: String,
-    required: true
+    id: {
+      type: String,
+      required: true
+    },
+    name: {
+      type: String,
+      required: true
+    },
+    email: {
+      type: String,
+      required: true
+    },
+    message: {
+      type: String,
+      required: true
+    }
   }
 });
 

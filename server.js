@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+const nodemailer = require("nodemailer");
 const key = require("./key");
 
 const User = require("./models/User.js");
@@ -64,10 +65,18 @@ const createMatch = (user1, user2) => {
   }.`;
 
   const match = new Match({
-    user1: user1.id,
-    user2: user2.id,
-    message1: message1,
-    message2: message2
+    user1: {
+      id: user1.id,
+      email: user1.email,
+      name: user1.firstName,
+      message: user1.message
+    },
+    user2: {
+      id: user2.id,
+      email: user2.email,
+      name: user2.firstName,
+      message: user2.message
+    }
   });
   match.save(function(err) {
     console.log(err);
@@ -110,6 +119,87 @@ app.post("/api/form", (req, res) => {
   user.save(function(err, newUser) {
     res.send("saved to database");
     findMatch(newUser);
+  });
+});
+
+//send email
+
+app.post("/api/send", (req, res) => {
+  const transporter = nodemailer.createTransport({
+    host: "smtp.ethereal.email",
+    port: 587,
+    auth: {
+      user: "d3dknprfuzhco4pu@ethereal.email",
+      pass: "2dvqG9MMGNMGXFT97x"
+    }
+  });
+
+  const output1 = `
+  <p>${req.body.match.user1.message}</p>
+  <p><a href="">Message ${req.body.match.user2.name} to set up the date.</a></p>
+  <p><a href="">If your friend isn't available anymore, click here and we'll stop emailing you.</a></p>
+  <p><a href="">If you know someone who has a friend they want to set up, click here.</a></p>
+  `;
+
+  // setup email data with unicode symbols
+  let mailOptions1 = {
+    from: '"Blind Date" <d3dknprfuzhco4pu@ethereal.email>', // sender address
+    to: req.body.match.user1.email, // list of receivers
+    subject: "Blind Date Match", // Subject line
+    text: output1, // plain text body
+    html: output1 // html body
+  };
+
+  // send mail with defined transport object
+  transporter.sendMail(mailOptions1, (error, info) => {
+    if (error) {
+      return console.log(error);
+    }
+    console.log("Message sent: %s", info.messageId);
+    // Preview only available when sending through an Ethereal account
+    console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+
+    // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+    // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+  });
+
+  const output2 = `
+  <p>${req.body.match.user2.message}</p>
+  <p><a href="">Message ${req.body.match.user1.name} to set up the date.</a></p>
+  <p><a href="">If your friend isn't available anymore, click here and we'll stop emailing you.</a></p>
+  <p><a href="">If you know someone who has a friend they want to set up, click here.</a></p>
+  `;
+
+  // setup email data with unicode symbols
+  let mailOptions2 = {
+    from: '"Blind Date" <d3dknprfuzhco4pu@ethereal.email>', // sender address
+    to: req.body.match.user2.email, // list of receivers
+    subject: "Blind Date Match", // Subject line
+    text: output2, // plain text body
+    html: output2 // html body
+  };
+
+  // send mail with defined transport object
+  transporter.sendMail(mailOptions2, (error, info) => {
+    if (error) {
+      return console.log(error);
+    }
+    console.log("Message sent: %s", info.messageId);
+    // Preview only available when sending through an Ethereal account
+    console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+
+    // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+    // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+  });
+  console.log(req.body);
+  res.send("sent");
+});
+
+// Match listing api
+
+app.get("/api/matches", (req, res) => {
+  Match.find({}, "user1 message1 user2 message2", function(error, matches) {
+    res.json(matches);
   });
 });
 
