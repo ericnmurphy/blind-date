@@ -9,6 +9,8 @@ export default class FourthStep extends Component {
 
   handleSubmit() {
     const {
+      id,
+      email,
       firstName,
       lastName,
       profession,
@@ -37,6 +39,8 @@ export default class FourthStep extends Component {
 
     axios
       .post("/api/form", {
+        id,
+        email,
         firstName,
         lastName,
         profession,
@@ -60,7 +64,7 @@ export default class FourthStep extends Component {
       .then(res => {
         console.log(res);
         console.log(res.data);
-        this.props.nextStep();
+        // this.props.nextStep();
       });
   }
 
@@ -130,7 +134,7 @@ export default class FourthStep extends Component {
                   <div className="radio">
                     <Radio
                       field="beard"
-                      value="cleanShaven"
+                      value="clean-shaven"
                       className={formApi.getError("beard")}
                       id="radio-clean-shaven"
                     />
@@ -148,7 +152,7 @@ export default class FourthStep extends Component {
                   <div className="radio">
                     <Radio
                       field="beard"
-                      value="mustache"
+                      value="mustached"
                       className={formApi.getError("beard")}
                       id="radio-mustache"
                     />
@@ -157,7 +161,7 @@ export default class FourthStep extends Component {
                   <div className="radio">
                     <Radio
                       field="beard"
-                      value="goatee"
+                      value="goateed"
                       className={formApi.getError("beard")}
                       id="radio-goatee"
                     />

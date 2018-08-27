@@ -60,6 +60,9 @@ const UserSchema = new mongoose.Schema({
   },
   haunt: {
     type: String
+  },
+  ancestors: {
+    type: Array
   }
 });
 

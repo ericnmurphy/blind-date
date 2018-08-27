@@ -9,7 +9,6 @@ const Match = require("./models/Match.js");
 
 const app = express();
 const port = process.env.PORT || 5000;
-const siteUrl = "http://localhost:3000/";
 
 mongoose.Promise = global.Promise;
 
@@ -24,20 +23,16 @@ mongoose
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-//nodemailer setup
-const transporter = nodemailer.createTransport({
-  host: "smtp.ethereal.email",
-  port: 587,
-  auth: {
-    user: "d3dknprfuzhco4pu@ethereal.email",
-    pass: "2dvqG9MMGNMGXFT97x"
-  }
-});
+//set up Nodemailer
+
+const config = require("./helpers/nodemailer");
+const siteUrl = config.siteUrl;
+const transporter = config.transporter;
 
 // Create match function
 
 const createMatch = (user1, user2) => {
-  const message1 = `Hi ${user1.firstName},
+  user1.message = `Hi ${user1.firstName},
   Here's the Blind Date for your friend.
 
   ${user1.firstName}, ${user1.profession}, ${user1.company} (${
@@ -50,13 +45,15 @@ const createMatch = (user1, user2) => {
     user1.adjective5
   } and ${user1.adjective6}. ${
     user1.gender === "man"
-      ? `He is ${user1.beard}.`
+      ? `He ${
+          user1.beard === "stubble" ? `has ${user1.beard}` : `is ${user1.beard}`
+        }.`
       : `Her best quality is ${user1.bestQuality}.`
   } You're most likely to find ${user1.gender === "man" ? "him" : "her"} ${
     user1.haunt
   }.`;
 
-  const message2 = `Hi ${user2.firstName},
+  user2.message = `Hi ${user2.firstName},
   Here's the Blind Date for your friend.
 
   ${user2.firstName}, ${user2.profession}, ${user2.company} (${
@@ -69,7 +66,9 @@ const createMatch = (user1, user2) => {
     user2.adjective5
   } and ${user2.adjective6}. ${
     user2.gender === "man"
-      ? `He is ${user2.beard}.`
+      ? `He is ${
+          user2.beard === "stubble" ? `has ${user2.beard}` : `is ${user2.beard}`
+        }.`
       : `Her best quality is ${user2.bestQuality}.`
   } You're most likely to find ${user2.gender === "man" ? "him" : "her"} ${
     user2.haunt
@@ -98,13 +97,16 @@ const createMatch = (user1, user2) => {
 
 const findMatch = user => {
   const matchGender = user.gender === "man" ? "woman" : "man";
-  const params = {};
-  params["gender"] = matchGender;
-  params["socioeconomic"] = user.socioeconomic;
-  params["age"] = { $gte: user.age - 5, $lte: user.age + 5 };
+  console.log("ancestors", user.ancestors);
+  const params = {
+    gender: matchGender,
+    socioeconomic: user.socioeconomic,
+    age: { $gte: user.age - 5, $lte: user.age + 5 },
+    _id: { $in: user.ancestors }
+  };
   User.find(
     params,
-    "id firstName profession company website gender association height adjective1 adjective2 adjective3 adjective4 adjective5 adjective6 bear bestQuality haunt",
+    "id email firstName profession company website gender association height adjective1 adjective2 adjective3 adjective4 adjective5 adjective6 beard bestQuality haunt",
     function(err, users) {
       if (err) {
         return handleError(err);
@@ -112,8 +114,17 @@ const findMatch = user => {
         console.log(users);
         users.forEach(singleUser => {
           const user2 = singleUser;
-          console.log(user2);
-          createMatch(user, user2);
+          console.log("user.id", user.id);
+          console.log("user2.id", user2.id);
+          Match.findOne({ "user1.id": user.id, "user2.id": user2.id }, function(
+            err,
+            result
+          ) {
+            console.log("result", result);
+            if (!result) {
+              createMatch(user, user2);
+            }
+          });
         });
       }
     }
@@ -125,9 +136,10 @@ const findMatch = user => {
 app.post("/api/form", (req, res) => {
   console.log(req.body);
 
-  const user = new User(req.body);
-  console.log(user);
-  user.save(function(err, newUser) {
+  User.findOneAndUpdate({ _id: req.body.id }, req.body, { new: true }, function(
+    err,
+    newUser
+  ) {
     res.send("saved to database");
     findMatch(newUser);
   });
@@ -135,14 +147,14 @@ app.post("/api/form", (req, res) => {
 
 //send email invite
 sendInvite = user => {
-  const inviteText = `Hi.\n\nWe heard you have someone to set up.\n\nCopy and paste the URL. ${siteUrl}:${
+  const inviteText = `Hi.\n\nWe heard you have someone to set up.\n\nCopy and paste the URL. ${siteUrl}${
     user.id
   }`;
 
   const inviteHtml = `
   <p>Hi.</p>
   <p>We heard you have someone to set up.</p>
-  <p><span style="background-color: yellow"><a href="${siteUrl}:${
+  <p><span style="background-color: yellow"><a href="${siteUrl}${
     user.id
   }">Click here.</a></span></p>
   `;
@@ -174,12 +186,19 @@ sendInvite = user => {
 
 app.post("/api/invite", (req, res) => {
   console.log(req.body);
-
-  const user = new User(req.body);
-  console.log(user);
-  user.save(function(err, newUser) {
-    res.send("saved to database");
-    sendInvite(newUser);
+  User.findOne({ email: req.body.email }, function(err, result) {
+    if (!result) {
+      //if email doesn't already exist...
+      const user = new User(req.body);
+      console.log(user);
+      user.save(function(err, newUser) {
+        res.send("saved to database");
+        sendInvite(newUser);
+      });
+    } else {
+      res.status(400);
+      res.send("This email has already been invited.");
+    }
   });
 });
 
@@ -187,7 +206,10 @@ app.post("/api/invite", (req, res) => {
 
 app.get("/api/email", (req, res) => {
   console.log(req.query.id);
-  User.findById(req.query.id, "email firstName", function(error, match) {
+  User.findById(req.query.id, "email firstName ancestors", function(
+    error,
+    match
+  ) {
     if (error) {
       res.status(400);
       res.send(
@@ -200,6 +222,28 @@ app.get("/api/email", (req, res) => {
         res.send("You've already set up your friend.");
       } else {
         res.json(match);
+      }
+    }
+  });
+});
+
+//check if ID exists
+
+app.get("/api/invite-friend", (req, res) => {
+  User.findById(req.query.id, "firstName ancestors", function(error, match) {
+    if (error) {
+      res.status(400);
+      res.send(
+        "There's no user with this ID. Check the URL from your email and try again."
+      );
+    } else {
+      if (!match.firstName) {
+        res.status(400);
+        res.send(
+          "You need to set up your friend first. Please refer to your email."
+        );
+      } else {
+        res.send(match.ancestors);
       }
     }
   });

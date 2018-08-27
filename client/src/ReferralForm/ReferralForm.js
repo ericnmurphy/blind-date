@@ -19,7 +19,10 @@ export default class ReferralForm extends Component {
         console.log(res.data);
         this.setState({
           authenticated: true,
-          values: { email: res.data.email }
+          values: {
+            id: this.props.match.params.id,
+            email: res.data.email
+          }
         });
       })
       .catch(err => {

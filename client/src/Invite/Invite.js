@@ -3,7 +3,7 @@ import axios from "axios";
 import { Form, Text } from "informed";
 import isEmail from "validator/lib/isEmail";
 
-export default class FirstStep extends Component {
+export default class Invite extends Component {
   state = {
     processing: false,
     message: ""
@@ -15,11 +15,21 @@ export default class FirstStep extends Component {
 
   handleSubmit = () => {
     const data = this.formApi.getState().values;
+    data.ancestors = ["1", "1"];
     this.setState({ processing: true, message: "Sending..." });
-    axios.post("/api/invite", data).then(res => {
-      this.setState({ processing: false, message: `Sent to ${data.email}.` });
-      this.formApi.reset();
-    });
+    axios
+      .post("/api/invite", data)
+      .then(res => {
+        this.setState({ processing: false, message: `Sent to ${data.email}.` });
+        this.formApi.reset();
+      })
+      .catch(err => {
+        this.setState({
+          processing: false,
+          message: err.response.data
+        });
+        this.formApi.reset();
+      });
   };
 
   render() {
