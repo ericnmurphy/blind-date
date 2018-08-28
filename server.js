@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const router = express.Router();
 const bodyParser = require("body-parser");
 const nodemailer = require("nodemailer");
 const key = require("./key");
@@ -9,6 +10,9 @@ const Match = require("./models/Match.js");
 
 const app = express();
 const port = process.env.PORT || 5000;
+
+//load & use routes
+const adminMatches = require("./routes/admin/matches");
 
 mongoose.Promise = global.Promise;
 
@@ -308,7 +312,9 @@ app.post("/api/send", (req, res) => {
     // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
   });
   console.log(req.body);
-  res.send("sent");
+  Match.findByIdAndRemove(req.body.match._id, () => {
+    res.send("Sent and removed.");
+  });
 });
 
 // Match listing api
@@ -318,5 +324,9 @@ app.get("/api/matches", (req, res) => {
     res.json(matches);
   });
 });
+
+//use routes
+
+app.use("/api/admin/matches", adminMatches);
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
