@@ -38,7 +38,10 @@ export default class InviteFriend extends Component {
     axios
       .post("/api/invite", data)
       .then(res => {
-        this.setState({ processing: false, message: `Sent to ${data.email}.` });
+        this.setState({
+          processing: false,
+          message: `Thank you. We’ll be in touch with them directly.`
+        });
         this.formApi.reset();
       })
       .catch(err => {

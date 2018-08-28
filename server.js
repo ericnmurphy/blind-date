@@ -33,46 +33,44 @@ const transporter = config.transporter;
 
 const createMatch = (user1, user2) => {
   user1.message = `Hi ${user1.firstName},
-  Here's the Blind Date for your friend.
 
-  ${user1.firstName}, ${user1.profession}, ${user1.company} (${
+Here's the Blind Date for your friend.
+
+${user1.firstName}, ${user1.profession}, ${user1.company} (${
     user1.website
-  }) knows their friend through ${user1.association}. ${
+  }) knows their friend through ${user1.association.toLowerCase()}. ${
     user1.gender === "man" ? "He's" : "She's"
-  } ${user1.height === "medium" ? "of medium build" : user1.height}, ${
-    user1.adjective1
-  }, ${user1.adjective2}, ${user1.adjective3}, ${user1.adjective4}, ${
-    user1.adjective5
-  } and ${user1.adjective6}. ${
+  } ${
+    user1.height === "medium" ? "of medium build" : user1.height
+  }, ${user1.adjective1.toLowerCase()}, ${user1.adjective2.toLowerCase()}, ${user1.adjective3.toLowerCase()}, ${user1.adjective4.toLowerCase()}, ${user1.adjective5.toLowerCase()} and ${user1.adjective6.toLowerCase()}. ${
     user1.gender === "man"
       ? `He ${
           user1.beard === "stubble" ? `has ${user1.beard}` : `is ${user1.beard}`
         }.`
-      : `Her best quality is ${user1.bestQuality}.`
-  } You're most likely to find ${user1.gender === "man" ? "him" : "her"} ${
-    user1.haunt
-  }.`;
+      : `Her best quality is ${user1.bestQuality.toLowerCase()}.`
+  } You're most likely to find ${
+    user1.gender === "man" ? "him" : "her"
+  } ${user1.haunt.toLowerCase()}.`;
 
   user2.message = `Hi ${user2.firstName},
-  Here's the Blind Date for your friend.
 
-  ${user2.firstName}, ${user2.profession}, ${user2.company} (${
+Here's the Blind Date for your friend.
+
+${user2.firstName}, ${user2.profession}, ${user2.company} (${
     user2.website
-  }) knows their friend through ${user2.association}. ${
+  }) knows their friend through ${user2.association.toLowerCase()}. ${
     user2.gender === "man" ? "He's" : "She's"
-  } ${user2.height === "medium" ? "of medium build" : user2.height}, ${
-    user2.adjective1
-  }, ${user2.adjective2}, ${user2.adjective3}, ${user2.adjective4}, ${
-    user2.adjective5
-  } and ${user2.adjective6}. ${
+  } ${
+    user2.height === "medium" ? "of medium build" : user2.height
+  }, ${user2.adjective1.toLowerCase()}, ${user2.adjective2.toLowerCase()}, ${user2.adjective3.toLowerCase()}, ${user2.adjective4.toLowerCase()}, ${user2.adjective5.toLowerCase()} and ${user2.adjective6.toLowerCase()}. ${
     user2.gender === "man"
       ? `He is ${
           user2.beard === "stubble" ? `has ${user2.beard}` : `is ${user2.beard}`
         }.`
-      : `Her best quality is ${user2.bestQuality}.`
-  } You're most likely to find ${user2.gender === "man" ? "him" : "her"} ${
-    user2.haunt
-  }.`;
+      : `Her best quality is ${user2.bestQuality.toLowerCase()}.`
+  } You're most likely to find ${
+    user2.gender === "man" ? "him" : "her"
+  } ${user2.haunt.toLowerCase()}.`;
 
   const match = new Match({
     user1: {
