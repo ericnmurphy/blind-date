@@ -249,6 +249,29 @@ button:last-child {
   max-width: 480px;
 }
 
+/* table */
+
+.users-table {
+  overflow-x: auto;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+table,
+tr,
+th,
+td {
+  border: 1px solid #ddd;
+}
+
+td,
+th {
+  text-align: left;
+  padding: 8px;
+}
+
 /* responsive */
 
 @media (max-width: 768px) {

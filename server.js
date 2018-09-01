@@ -68,7 +68,7 @@ ${user2.firstName}, ${user2.profession}, ${user2.company} (${
     user2.height === "medium" ? "of medium build" : user2.height
   }, ${user2.adjective1.toLowerCase()}, ${user2.adjective2.toLowerCase()}, ${user2.adjective3.toLowerCase()}, ${user2.adjective4.toLowerCase()}, ${user2.adjective5.toLowerCase()} and ${user2.adjective6.toLowerCase()}. ${
     user2.gender === "man"
-      ? `He is ${
+      ? `He ${
           user2.beard === "stubble" ? `has ${user2.beard}` : `is ${user2.beard}`
         }.`
       : `Her best quality is ${user2.bestQuality.toLowerCase()}.`
@@ -258,7 +258,9 @@ app.post("/api/send", (req, res) => {
   <p>${req.body.match.user1.message}</p>
   <p><a href="">Message ${req.body.match.user2.name} to set up the date.</a></p>
   <p><a href="">If your friend isn't available anymore, click here and we'll stop emailing you.</a></p>
-  <p><a href="">If you know someone who has a friend they want to set up, click here.</a></p>
+  <p><a href="${siteUrl}/invite/${
+    req.body.match.user1.id
+  }">If you know someone who has a friend they want to set up, click here.</a></p>
   `;
 
   // setup email data with unicode symbols
@@ -287,7 +289,9 @@ app.post("/api/send", (req, res) => {
   <p>${req.body.match.user2.message}</p>
   <p><a href="">Message ${req.body.match.user1.name} to set up the date.</a></p>
   <p><a href="">If your friend isn't available anymore, click here and we'll stop emailing you.</a></p>
-  <p><a href="">If you know someone who has a friend they want to set up, click here.</a></p>
+  <p><a href="${siteUrl}/invite/${
+    req.body.match.user2.id
+  }">If you know someone who has a friend they want to set up, click here.</a></p>
   `;
 
   // setup email data with unicode symbols
@@ -314,6 +318,14 @@ app.post("/api/send", (req, res) => {
   console.log(req.body);
   Match.findByIdAndRemove(req.body.match._id, () => {
     res.send("Sent and removed.");
+  });
+});
+
+// User listing api
+
+app.get("/api/users", (req, res) => {
+  User.find({}, function(error, users) {
+    res.json(users);
   });
 });
 
