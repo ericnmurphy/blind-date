@@ -206,6 +206,7 @@ export default class Users extends Component {
                 </th>
                 <th>Adjectives</th>
                 <th
+                  nowrap="true"
                   className={
                     this.state.value === "bestQuality"
                       ? this.state.desc
