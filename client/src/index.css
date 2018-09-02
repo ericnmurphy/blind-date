@@ -223,7 +223,7 @@ button:last-child {
 .match-textareas textarea {
   flex: 1;
   margin: 0 10px;
-  min-height: 200px;
+  min-height: 160px;
 }
 
 .match-buttons {

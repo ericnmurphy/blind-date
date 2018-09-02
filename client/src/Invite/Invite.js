@@ -15,7 +15,7 @@ export default class Invite extends Component {
 
   handleSubmit = () => {
     const data = this.formApi.getState().values;
-    data.ancestors = ["1", "1"];
+    data.ancestors = ["5b8404ea3e451b21e46b0cd3", "5b8404ea3e451b21e46b0cd3"]; //admin id
     this.setState({ processing: true, message: "Sending..." });
     axios
       .post("/api/invite", data)
