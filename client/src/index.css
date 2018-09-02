@@ -272,6 +272,29 @@ th {
   padding: 8px;
 }
 
+th {
+  cursor: pointer;
+  padding-right: 15px;
+}
+
+th:after {
+  content: "↓";
+  padding-left: 5px;
+  visibility: hidden;
+}
+
+th.sort-desc:after {
+  visibility: visible;
+  padding-left: 5px;
+  content: "↓";
+}
+
+th.sort-asc:after {
+  visibility: visible;
+  padding-left: 5px;
+  content: "↑";
+}
+
 /* responsive */
 
 @media (max-width: 768px) {
