@@ -18,7 +18,7 @@ mongoose.Promise = global.Promise;
 
 mongoose
   .connect(
-    process.env.mongoURI,
+    process.env.mongoURI || require("./key"),
     { useNewUrlParser: true }
   )
   .then(() => console.log("MongoDB Connected"))
