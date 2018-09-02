@@ -1,6 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const router = express.Router();
+const path = require("path");
 const bodyParser = require("body-parser");
 const nodemailer = require("nodemailer");
 // const key = require("./key");
@@ -10,6 +10,8 @@ const Match = require("./models/Match.js");
 
 const app = express();
 const port = process.env.PORT || 5000;
+
+app.use(express.static(path.join(__dirname, "client/build")));
 
 //load & use routes
 const adminMatches = require("./routes/admin/matches");
@@ -335,6 +337,12 @@ app.get("/api/matches", (req, res) => {
   Match.find({}, "user1 message1 user2 message2", function(error, matches) {
     res.json(matches);
   });
+});
+
+// The "catchall" handler: for any request that doesn't
+// match one above, send back React's index.html file.
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname + "/client/build/index.html"));
 });
 
 //use routes
