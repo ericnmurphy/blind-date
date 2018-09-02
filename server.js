@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const router = express.Router();
 const bodyParser = require("body-parser");
 const nodemailer = require("nodemailer");
-const key = require("./key");
+// const key = require("./key");
 
 const User = require("./models/User.js");
 const Match = require("./models/Match.js");
@@ -18,7 +18,7 @@ mongoose.Promise = global.Promise;
 
 mongoose
   .connect(
-    key,
+    process.env.mongoURI,
     { useNewUrlParser: true }
   )
   .then(() => console.log("MongoDB Connected"))
