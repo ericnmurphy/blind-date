@@ -262,7 +262,7 @@ app.post("/api/send", (req, res) => {
   <p><a href="">If your friend isn't available anymore, click here and we'll stop emailing you.</a></p>
   <p><a href="${siteUrl}/invite/${
     req.body.match.user1.id
-  }">If you know someone who has a friend they want to set up, click here.</a></p>
+  }">If you know someone else who wants to set up a friend, click here.</a> (This link will work as many times as you want.)</p>
   `;
 
   // setup email data with unicode symbols
@@ -293,7 +293,7 @@ app.post("/api/send", (req, res) => {
   <p><a href="">If your friend isn't available anymore, click here and we'll stop emailing you.</a></p>
   <p><a href="${siteUrl}/invite/${
     req.body.match.user2.id
-  }">If you know someone who has a friend they want to set up, click here.</a></p>
+  }">If you know someone else who wants to set up a friend, click here.</a> (This link will work as many times as you want.)</p>
   `;
 
   // setup email data with unicode symbols

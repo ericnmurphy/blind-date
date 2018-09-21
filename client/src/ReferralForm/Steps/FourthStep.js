@@ -256,7 +256,7 @@ export default class FourthStep extends Component {
             <div className="inline-field">
               <label htmlFor="haunt">
                 You’re most likely to find{" "}
-                {this.props.gender === "man" ? "him" : "her"}
+                {this.props.gender === "man" ? "him " : "her "}
               </label>
               <Text
                 field="haunt"

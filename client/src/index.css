@@ -1,7 +1,9 @@
 body {
   margin: 0;
-  font-family: sans-serif;
+  font-family: fixedsys, LucidaTerminal, monospace;
   font-size: 16px;
+  background: #000;
+  color: #ccc;
 }
 
 .container {
@@ -13,7 +15,7 @@ body {
 h3 {
   font-size: 16px;
   font-weight: 500;
-  text-align: center;
+  text-align: left;
   margin-bottom: 6em;
 }
 
@@ -22,7 +24,7 @@ h3 {
 .field {
   display: flex;
   width: 50%;
-  margin-bottom: 1.25em;
+  margin-bottom: 1.5em;
 }
 
 .field label {
@@ -34,12 +36,18 @@ h3 {
   flex: 2;
   font-size: 16px;
   padding: 0.15rem;
-  background: #ffff00;
+  background: #000;
+  color: #ccc;
   border: 0;
 }
 
 input:focus {
   outline: none;
+}
+
+input,
+button {
+  font-family: fixedsys, LucidaTerminal, monospace;
 }
 
 /* Number inputs */
@@ -64,7 +72,8 @@ input[type="number"] {
   margin-top: 0.5em;
   font-size: 16px;
   padding: 0.15rem;
-  background: #ffff00;
+  background: #000;
+  color: #ccc;
   border: 0;
 }
 
@@ -84,7 +93,8 @@ input[type="number"] {
   flex: 1;
   font-size: 16px;
   padding: 0.15rem;
-  background: #ffff00;
+  background: #000;
+  color: #ccc;
   border: 0;
 }
 
@@ -104,7 +114,8 @@ input[type="number"] {
   width: 1.5rem;
   font-size: 16px;
   padding: 0.15rem;
-  background: #ffff00;
+  background: #000;
+  color: #ccc;
   border: 0;
 }
 
@@ -124,7 +135,7 @@ input[type="number"] {
 }
 
 .radio label {
-  background: #ffff00;
+  background: #000;
   cursor: pointer;
   padding: 0.15rem;
 }
@@ -150,7 +161,7 @@ input:checked + label {
 }
 
 .short-radio > .radio label {
-  background: #ffff00;
+  background: #000;
   cursor: pointer;
   padding: 0.15rem;
 }
@@ -158,7 +169,7 @@ input:checked + label {
 /* checkboxes */
 
 .checkbox label {
-  background: #ffff00;
+  background: #000;
   cursor: pointer;
 
   padding: 0.15rem;
@@ -194,12 +205,11 @@ input[type="radio"].error + label {
 /* buttons */
 
 button {
-  background: none;
   border: none;
   font-size: 16px;
-  background: #ffff00;
+  background: #00a8a8;
+  color: #000;
   margin-top: 2em;
-  padding: 0.45rem 0.7rem;
   margin-right: 0.5rem;
   cursor: pointer;
 }
@@ -244,8 +254,7 @@ button:last-child {
 /* form styles */
 
 .invite-form {
-  margin: 0 auto;
-  text-align: center;
+  text-align: left;
   max-width: 480px;
 }
 
