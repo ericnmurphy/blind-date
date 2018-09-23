@@ -63,6 +63,10 @@ const UserSchema = new mongoose.Schema({
   },
   ancestors: {
     type: Array
+  },
+  status: {
+    type: String,
+    default: "Pending"
   }
 });
 

@@ -14,7 +14,7 @@ const port = process.env.PORT || 5000;
 app.use(express.static(path.join(__dirname, "client/build")));
 
 //load & use routes
-const adminMatches = require("./routes/admin/matches");
+const adminMatches = require("./routes/admin/matches.js");
 
 mongoose.Promise = global.Promise;
 
@@ -259,7 +259,9 @@ app.post("/api/send", (req, res) => {
   const output1 = `
   <p>${req.body.match.user1.message}</p>
   <p><a href="">Message ${req.body.match.user2.name} to set up the date.</a></p>
-  <p><a href="">If your friend isn't available anymore, click here and we'll stop emailing you.</a></p>
+  <p><a href="${siteUrl}/disable/${
+    req.body.match.user1.id
+  }">If your friend isn't available anymore, click here and we'll stop emailing you.</a></p>
   <p><a href="${siteUrl}/invite/${
     req.body.match.user1.id
   }">If you know someone else who wants to set up a friend, click here.</a> (This link will work as many times as you want.)</p>
@@ -267,11 +269,11 @@ app.post("/api/send", (req, res) => {
 
   // setup email data with unicode symbols
   let mailOptions1 = {
-    from: '"Blind Date" <d3dknprfuzhco4pu@ethereal.email>', // sender address
-    to: req.body.match.user1.email, // list of receivers
-    subject: "Blind Date Match", // Subject line
-    text: output1, // plain text body
-    html: output1 // html body
+    from: '"Blind Date" <d3dknprfuzhco4pu@ethereal.email>',
+    to: req.body.match.user1.email,
+    subject: "Blind Date Match",
+    text: output1,
+    html: output1
   };
 
   // send mail with defined transport object
@@ -290,7 +292,9 @@ app.post("/api/send", (req, res) => {
   const output2 = `
   <p>${req.body.match.user2.message}</p>
   <p><a href="">Message ${req.body.match.user1.name} to set up the date.</a></p>
-  <p><a href="">If your friend isn't available anymore, click here and we'll stop emailing you.</a></p>
+  <p><a href="${siteUrl}/disable/${
+    req.body.match.user2.id
+  }">If your friend isn't available anymore, click here and we'll stop emailing you.</a></p>
   <p><a href="${siteUrl}/invite/${
     req.body.match.user2.id
   }">If you know someone else who wants to set up a friend, click here.</a> (This link will work as many times as you want.)</p>
@@ -318,9 +322,14 @@ app.post("/api/send", (req, res) => {
     // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
   });
   console.log(req.body);
-  Match.findByIdAndRemove(req.body.match._id, () => {
-    res.send("Sent and removed.");
-  });
+  Match.findOneAndUpdate(
+    { _id: req.body.match._id },
+    { $set: { status: "sent", sentDate: Date.now() } },
+    () => {
+      console.log("reached");
+      res.send("Sent and updated.");
+    }
+  );
 });
 
 // User listing api
@@ -334,7 +343,46 @@ app.get("/api/users", (req, res) => {
 // Match listing api
 
 app.get("/api/matches", (req, res) => {
-  Match.find({}, "user1 message1 user2 message2", function(error, matches) {
+  Match.find({ status: "active" }, "user1 message1 user2 message2", function(
+    error,
+    matches
+  ) {
+    res.json(matches);
+  });
+});
+
+// Check if user exists
+
+app.get("/api/exists", (req, res) => {
+  User.findById(req.query.id, "email", function(error, user) {
+    if (error) {
+      res.status(400);
+      res.send(
+        "There's no user with this ID. Check the URL from your email and try again."
+      );
+    } else {
+      res.send(user.id);
+    }
+  });
+});
+
+//Disable user
+
+app.post("/api/disable", (req, res) => {
+  User.findOneAndUpdate(
+    { _id: req.body.id },
+    {
+      status: "disabled"
+    },
+    () => {
+      res.send("disabled");
+    }
+  );
+});
+
+//get sent matches
+app.get("/api/admin/matches/sent", (req, res) => {
+  Match.find({ status: "sent" }, "user1 user2", function(error, matches) {
     res.json(matches);
   });
 });

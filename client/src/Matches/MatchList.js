@@ -3,15 +3,22 @@ import axios from "axios";
 
 export default class MatchList extends Component {
   state = {
-    matches: []
+    matches: [],
+    message: "Loading . . ."
   };
 
   componentDidMount() {
     axios.get("/api/matches", {}).then(res => {
-      this.setState({
-        authenticated: true,
-        matches: res.data
-      });
+      if (res.data.length === 0) {
+        this.setState({
+          message: "No matches have been made."
+        });
+      } else {
+        this.setState({
+          message: "Loaded.",
+          matches: res.data
+        });
+      }
     });
   }
 
@@ -88,8 +95,7 @@ export default class MatchList extends Component {
   render() {
     return (
       <React.Fragment>
-        {this.state.authenticated === undefined && <h3>Loading...</h3>}
-        {this.state.authenticated === true &&
+        {(this.state.message === "Loaded.") === true ? (
           this.state.matches.map((match, i) => (
             <div key={i} id={i}>
               {this.state.matches[i].delete === "Deleted." ? (
@@ -157,7 +163,10 @@ export default class MatchList extends Component {
                 </React.Fragment>
               )}
             </div>
-          ))}
+          ))
+        ) : (
+          <h3>{this.state.message}</h3>
+        )}
       </React.Fragment>
     );
   }
