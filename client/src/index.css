@@ -313,6 +313,10 @@ th.sort-asc:after {
   color: #00a8a8;
 }
 
+.sent-footer {
+  margin-bottom: 50px;
+}
+
 /* responsive */
 
 @media (max-width: 768px) {

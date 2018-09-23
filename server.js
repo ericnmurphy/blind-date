@@ -382,7 +382,10 @@ app.post("/api/disable", (req, res) => {
 
 //get sent matches
 app.get("/api/admin/matches/sent", (req, res) => {
-  Match.find({ status: "sent" }, "user1 user2", function(error, matches) {
+  Match.find({ status: "sent" }, "user1 user2 sentDate", function(
+    error,
+    matches
+  ) {
     res.json(matches);
   });
 });
