@@ -4,13 +4,6 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const Match = require("../../models/Match.js");
 
-//get sent matches
-router.get("/sent", (req, res) => {
-  Match.find({ status: "sent" }, "user1 user2", function(error, matches) {
-    res.json(matches);
-  });
-});
-
 //save update to messages
 router.post("/save", (req, res) => {
   Match.findOneAndUpdate(

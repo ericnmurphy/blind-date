@@ -37,6 +37,8 @@ export default class FourthStep extends Component {
       return socioObject[key];
     });
 
+    const status = "active";
+
     axios
       .post("/api/form", {
         id,
@@ -59,7 +61,8 @@ export default class FourthStep extends Component {
         adjective5,
         adjective6,
         bestQuality,
-        haunt
+        haunt,
+        status
       })
       .then(res => {
         console.log(res);

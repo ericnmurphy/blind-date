@@ -106,7 +106,8 @@ const findMatch = user => {
     gender: matchGender,
     socioeconomic: user.socioeconomic,
     age: { $gte: user.age - 5, $lte: user.age + 5 },
-    _id: { $in: user.ancestors }
+    _id: { $in: user.ancestors },
+    status: "active"
   };
   User.find(
     params,
@@ -258,7 +259,9 @@ app.get("/api/invite-friend", (req, res) => {
 app.post("/api/send", (req, res) => {
   const output1 = `
   <p>${req.body.match.user1.message}</p>
-  <p><a href="">Message ${req.body.match.user2.name} to set up the date.</a></p>
+  <p><a href="mailto:${req.body.match.user1.email}">Message ${
+    req.body.match.user2.name
+  } to set up the date.</a></p>
   <p><a href="${siteUrl}/disable/${
     req.body.match.user1.id
   }">If your friend isn't available anymore, click here and we'll stop emailing you.</a></p>
@@ -291,7 +294,9 @@ app.post("/api/send", (req, res) => {
 
   const output2 = `
   <p>${req.body.match.user2.message}</p>
-  <p><a href="">Message ${req.body.match.user1.name} to set up the date.</a></p>
+  <p><a href="mailto:${req.body.match.user1.email}">Message ${
+    req.body.match.user1.name
+  } to set up the date.</a></p>
   <p><a href="${siteUrl}/disable/${
     req.body.match.user2.id
   }">If your friend isn't available anymore, click here and we'll stop emailing you.</a></p>
@@ -321,7 +326,7 @@ app.post("/api/send", (req, res) => {
     // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
     // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
   });
-  console.log(req.body);
+
   Match.findOneAndUpdate(
     { _id: req.body.match._id },
     { $set: { status: "sent", sentDate: Date.now() } },
@@ -375,7 +380,20 @@ app.post("/api/disable", (req, res) => {
       status: "disabled"
     },
     () => {
-      res.send("disabled");
+      //disable any matches that include this user
+      Match.update(
+        {
+          $and: [
+            { $or: [{ "user1.id": req.body.id }, { "user2.id": req.body.id }] },
+            { status: "active" }
+          ]
+        },
+        { status: "disabled" },
+        { multi: true },
+        () => {
+          res.send("disabled");
+        }
+      );
     }
   );
 });
