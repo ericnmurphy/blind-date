@@ -323,6 +323,24 @@ th.sort-asc:after {
   margin-bottom: 50px;
 }
 
+/* nav */
+
+.navigation {
+  margin-bottom: 30px;
+}
+
+.navigation ul {
+  padding: 0;
+}
+
+.navigation ul li {
+  list-style: none;
+}
+.navigation ul li a {
+  text-decoration: none;
+  color: teal;
+}
+
 /* responsive */
 
 @media (max-width: 768px) {
