@@ -36,8 +36,8 @@ h3 {
   flex: 2;
   font-size: 16px;
   padding: 0.15rem;
-  background: #000;
-  color: #ccc;
+  background: #ccc;
+  color: #000;
   border: 0;
 }
 
@@ -72,8 +72,8 @@ input[type="number"] {
   margin-top: 0.5em;
   font-size: 16px;
   padding: 0.15rem;
-  background: #000;
-  color: #ccc;
+  background: #ccc;
+  color: #000;
   border: 0;
 }
 
@@ -93,8 +93,8 @@ input[type="number"] {
   flex: 1;
   font-size: 16px;
   padding: 0.15rem;
-  background: #000;
-  color: #ccc;
+  background: #ccc;
+  color: #000;
   border: 0;
 }
 
@@ -114,8 +114,8 @@ input[type="number"] {
   width: 1.5rem;
   font-size: 16px;
   padding: 0.15rem;
-  background: #000;
-  color: #ccc;
+  background: #ccc;
+  color: #000;
   border: 0;
 }
 
@@ -135,7 +135,8 @@ input[type="number"] {
 }
 
 .radio label {
-  background: #000;
+  background: #ccc;
+  color: #000;
   cursor: pointer;
   padding: 0.15rem;
 }
@@ -161,7 +162,8 @@ input:checked + label {
 }
 
 .short-radio > .radio label {
-  background: #000;
+  background: #ccc;
+  color: #000;
   cursor: pointer;
   padding: 0.15rem;
 }
@@ -195,11 +197,11 @@ input:checked + label {
 /* errors */
 
 input.error {
-  background: red;
+  background: darkred;
 }
 
 input[type="radio"].error + label {
-  background: red;
+  background: darkred;
 }
 
 /* buttons */
@@ -207,7 +209,7 @@ input[type="radio"].error + label {
 button {
   border: none;
   font-size: 16px;
-  background: #00a8a8;
+  background: #ccc;
   color: #000;
   margin-top: 2em;
   margin-right: 0.5rem;
@@ -242,7 +244,7 @@ button:last-child {
 }
 
 .match-buttons > .delete {
-  background-color: red;
+  background-color: darkred;
   color: #fff;
   margin-right: auto;
 }
@@ -260,6 +262,10 @@ button:last-child {
 
 /* table */
 
+.users-dater {
+  background: darkred;
+}
+
 .users-table {
   overflow-x: auto;
 }
@@ -272,7 +278,7 @@ table,
 tr,
 th,
 td {
-  border: 1px solid #ddd;
+  border: 1px solid #ccc;
 }
 
 td,

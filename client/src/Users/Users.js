@@ -123,9 +123,9 @@ export default class Users extends Component {
                   className={
                     this.state.value === "association"
                       ? this.state.desc
-                        ? "sort-desc"
-                        : "sort-asc"
-                      : undefined
+                        ? "sort-desc users-dater"
+                        : "sort-asc users-dater"
+                      : "users-dater"
                   }
                   onClick={() => {
                     this.state.value === "association"
@@ -140,9 +140,9 @@ export default class Users extends Component {
                   className={
                     this.state.value === "gender"
                       ? this.state.desc
-                        ? "sort-desc"
-                        : "sort-asc"
-                      : undefined
+                        ? "sort-desc users-dater"
+                        : "sort-asc users-dater"
+                      : "users-dater"
                   }
                   onClick={() => {
                     this.state.value === "gender"
@@ -157,9 +157,9 @@ export default class Users extends Component {
                   className={
                     this.state.value === "age"
                       ? this.state.desc
-                        ? "sort-desc"
-                        : "sort-asc"
-                      : undefined
+                        ? "sort-desc users-dater"
+                        : "sort-asc users-dater"
+                      : "users-dater"
                   }
                   onClick={() => {
                     this.state.value === "age"
@@ -174,9 +174,9 @@ export default class Users extends Component {
                   className={
                     this.state.value === "socioeconomic"
                       ? this.state.desc
-                        ? "sort-desc"
-                        : "sort-asc"
-                      : undefined
+                        ? "sort-desc users-dater"
+                        : "sort-asc users-dater"
+                      : "users-dater"
                   }
                   onClick={() => {
                     this.state.value === "socioeconomic"
@@ -191,9 +191,9 @@ export default class Users extends Component {
                   className={
                     this.state.value === "height"
                       ? this.state.desc
-                        ? "sort-desc"
-                        : "sort-asc"
-                      : undefined
+                        ? "sort-desc users-dater"
+                        : "sort-asc users-dater"
+                      : "users-dater"
                   }
                   onClick={() => {
                     this.state.value === "height"
@@ -204,15 +204,15 @@ export default class Users extends Component {
                 >
                   Height
                 </th>
-                <th>Adjectives</th>
+                <th className="users-dater">Adjectives</th>
                 <th
                   nowrap="true"
                   className={
                     this.state.value === "bestQuality"
                       ? this.state.desc
-                        ? "sort-desc"
-                        : "sort-asc"
-                      : undefined
+                        ? "sort-desc users-dater"
+                        : "sort-asc users-dater"
+                      : "users-dater"
                   }
                   onClick={() => {
                     this.state.value === "bestQuality"
@@ -227,9 +227,9 @@ export default class Users extends Component {
                   className={
                     this.state.value === "beard"
                       ? this.state.desc
-                        ? "sort-desc"
-                        : "sort-asc"
-                      : undefined
+                        ? "sort-desc users-dater"
+                        : "sort-asc users-dater"
+                      : "users-dater"
                   }
                   onClick={() => {
                     this.state.value === "beard"
@@ -244,9 +244,9 @@ export default class Users extends Component {
                   className={
                     this.state.value === "haunt"
                       ? this.state.desc
-                        ? "sort-desc"
-                        : "sort-asc"
-                      : undefined
+                        ? "sort-desc users-dater"
+                        : "sort-asc users-dater"
+                      : "users-dater"
                   }
                   onClick={() => {
                     this.state.value === "haunt"
@@ -257,7 +257,7 @@ export default class Users extends Component {
                 >
                   Haunt
                 </th>
-                <th>Referrer</th>
+                <th className="users-dater">Referrer</th>
               </tr>
             </thead>
             <tbody>
@@ -284,12 +284,18 @@ export default class Users extends Component {
                     <td nowrap="true">{user.profession}</td>
                     <td nowrap="true">{user.company}</td>
                     <td nowrap="true">{user.website}</td>
-                    <td nowrap="true">{user.association}</td>
-                    <td nowrap="true">{user.gender}</td>
-                    <td>{user.age}</td>
-                    <td nowrap="true">{user.socioeconomic.join(", ")}</td>
-                    <td>{user.height}</td>
-                    <td nowrap="true">
+                    <td className="users-dater" nowrap="true">
+                      {user.association}
+                    </td>
+                    <td className="users-dater" nowrap="true">
+                      {user.gender}
+                    </td>
+                    <td className="users-dater">{user.age}</td>
+                    <td className="users-dater" nowrap="true">
+                      {user.socioeconomic.join(", ")}
+                    </td>
+                    <td className="users-dater">{user.height}</td>
+                    <td className="users-dater" nowrap="true">
                       {user.adjective1 && (
                         <React.Fragment>
                           {user.adjective1}, {user.adjective2},{" "}
@@ -298,10 +304,18 @@ export default class Users extends Component {
                         </React.Fragment>
                       )}
                     </td>
-                    <td nowrap="true">{user.bestQuality}</td>
-                    <td nowrap="true">{user.beard}</td>
-                    <td nowrap="true">{user.haunt}</td>
-                    <td nowrap="true">{this.getUserName(user.ancestors[1])}</td>
+                    <td className="users-dater" nowrap="true">
+                      {user.bestQuality}
+                    </td>
+                    <td className="users-dater" nowrap="true">
+                      {user.beard}
+                    </td>
+                    <td className="users-dater" nowrap="true">
+                      {user.haunt}
+                    </td>
+                    <td className="users-dater" nowrap="true">
+                      {this.getUserName(user.ancestors[1])}
+                    </td>
                   </tr>
                 ))}
             </tbody>
