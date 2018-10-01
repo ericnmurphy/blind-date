@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Route, Link, Redirect, Switch } from "react-router-dom";
+import axios from "axios";
 import ReferralForm from "./ReferralForm/ReferralForm";
 import MatchList from "./Matches/MatchList";
 import SentMatchList from "./Matches/SentMatchList";
@@ -7,55 +8,24 @@ import Users from "./Users/Users";
 import Invite from "./Invite/Invite";
 import InviteFriend from "./Invite/InviteFriend";
 import Disable from "./Disable/Disable";
+import Login from "./Login/Login";
 import "./App.css";
 
-const fakeAuth = {
+const Auth = {
   isAuthenticated: false,
   authenticate(cb) {
     this.isAuthenticated = true;
-    setTimeout(cb, 100); // fake async
   },
   signout(cb) {
     this.isAuthenticated = false;
-    setTimeout(cb, 100); // fake async
   }
 };
-
-class Login extends Component {
-  state = { redirectToReferrer: false };
-
-  login = () => {
-    fakeAuth.authenticate(() => {
-      this.setState(() => ({
-        redirectToReferrer: true
-      }));
-    });
-  };
-
-  render() {
-    const { redirectToReferrer } = this.state;
-    const { from } = this.props.location.state || {
-      from: { pathname: "/admin" }
-    };
-
-    if (redirectToReferrer === true) {
-      return <Redirect to={from} />;
-    }
-
-    return (
-      <div>
-        <p>Please log in.</p>
-        <button onClick={this.login}>Log in</button>
-      </div>
-    );
-  }
-}
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
     {...rest}
     render={props =>
-      fakeAuth.isAuthenticated === true ? (
+      this.user ? (
         <Component {...props} />
       ) : (
         <Redirect
@@ -93,11 +63,32 @@ class Admin extends Component {
 }
 
 class App extends Component {
+  state = { user: null, loggedIn: false };
+
+  componentDidMount = () => {
+    axios.get("/").then((req, res) => {
+      console.log(req.session);
+      console.log(req);
+      console.log(res);
+      if (res) {
+        this.setState({ loggedIn: true });
+      }
+    });
+  };
+
+  setUser = user => {
+    this.setState({ user });
+  };
+
   render() {
     return (
       <div className="container">
         <Switch>
-          <Route exact path="/login" component={Login} />
+          <Route
+            exact
+            path="/login"
+            render={props => <Login {...props} setUser={this.setUser} />}
+          />
           <Route path="/a" component={Admin} />
           <Route exact path="/:id" component={ReferralForm} />
         </Switch>

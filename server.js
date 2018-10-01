@@ -3,15 +3,64 @@ const mongoose = require("mongoose");
 const path = require("path");
 const bodyParser = require("body-parser");
 const nodemailer = require("nodemailer");
+const session = require("express-session");
+const passport = require("passport");
 // const key = require("./key");
 
 const User = require("./models/User.js");
 const Match = require("./models/Match.js");
+const Admin = require("./models/Admin.js");
 
 const app = express();
 const port = process.env.PORT || 5000;
 
 app.use(express.static(path.join(__dirname, "client/build")));
+
+//sessions
+app.use(
+  session({
+    secret: "KtFwV4TKc9H9VVBwkm3A2Dcb",
+    resave: false,
+    saveUninitialized: false
+  })
+);
+
+app.use((req, res, next) => {
+  console.log("req.session", req.session);
+  return next();
+});
+
+//passport
+app.use(passport.initialize());
+app.use(passport.session()); // calls serializeUser and deserializeUser
+
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function(user, done) {
+  done(null, user);
+});
+
+//local strategy passport
+const LocalStrategy = require("passport-local").Strategy;
+
+passport.use(
+  new LocalStrategy(function(username, password, done) {
+    Admin.findOne({ username: username }, function(err, user) {
+      if (err) {
+        return done(err);
+      }
+      if (!user) {
+        return done(null, false);
+      }
+      if (user.password !== password) {
+        return done(null, false);
+      }
+      return done(null, user);
+    });
+  })
+);
 
 //load & use routes
 const adminMatches = require("./routes/admin/matches.js");
@@ -408,10 +457,31 @@ app.get("/api/admin/matches/sent", (req, res) => {
   });
 });
 
+//login
+app.post(
+  "/api/login",
+  passport.authenticate("local", { failureRedirect: "/login" }),
+  function(req, res) {
+    res.redirect("/");
+  }
+);
+
+app.get(
+  "/api/login/check",
+  require("connect-ensure-login").ensureLoggedIn(),
+  function(req, res) {
+    res.send(req.user);
+  }
+);
+
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname + "/client/build/index.html"));
+});
+
+app.get("/", function(req, res) {
+  req.send(req.session);
 });
 
 //use routes
