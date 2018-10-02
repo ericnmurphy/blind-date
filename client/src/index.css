@@ -196,6 +196,10 @@ input:checked + label {
 
 /* errors */
 
+p.error {
+  color: darkred;
+}
+
 input.error {
   background: darkred;
 }

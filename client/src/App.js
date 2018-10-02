@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Route, Link, Redirect, Switch } from "react-router-dom";
-import axios from "axios";
 import ReferralForm from "./ReferralForm/ReferralForm";
 import MatchList from "./Matches/MatchList";
 import SentMatchList from "./Matches/SentMatchList";
@@ -10,34 +9,6 @@ import InviteFriend from "./Invite/InviteFriend";
 import Disable from "./Disable/Disable";
 import Login from "./Login/Login";
 import "./App.css";
-
-const Auth = {
-  isAuthenticated: false,
-  authenticate(cb) {
-    this.isAuthenticated = true;
-  },
-  signout(cb) {
-    this.isAuthenticated = false;
-  }
-};
-
-const PrivateRoute = ({ component: Component, ...rest }) => (
-  <Route
-    {...rest}
-    render={props =>
-      this.user ? (
-        <Component {...props} />
-      ) : (
-        <Redirect
-          to={{
-            pathname: "/login",
-            state: { from: props.location }
-          }}
-        />
-      )
-    }
-  />
-);
 
 class Admin extends Component {
   render() {
@@ -66,38 +37,56 @@ class App extends Component {
   state = { user: null, loggedIn: false };
 
   componentDidMount = () => {
-    axios.get("/").then((req, res) => {
-      console.log(req.session);
-      console.log(req);
-      console.log(res);
-      if (res) {
-        this.setState({ loggedIn: true });
-      }
-    });
+    const persistUser = localStorage.getItem("userLoggedIn");
+    persistUser && this.setState({ user: JSON.parse(persistUser) });
   };
 
   setUser = user => {
     this.setState({ user });
+    localStorage.setItem("userLoggedIn", JSON.stringify(user));
   };
 
   render() {
+    const PrivateRoute = ({ component: Component, ...rest }) => (
+      <Route
+        {...rest}
+        render={props =>
+          this.state.user ? (
+            <Component {...props} />
+          ) : (
+            <Redirect
+              to={{
+                pathname: "/login",
+                state: { from: props.location }
+              }}
+            />
+          )
+        }
+      />
+    );
     return (
       <div className="container">
         <Switch>
           <Route
             exact
             path="/login"
-            render={props => <Login {...props} setUser={this.setUser} />}
+            render={props =>
+              this.state.user ? (
+                <Redirect to={{ pathname: "/a" }} />
+              ) : (
+                <Login {...props} setUser={this.setUser} />
+              )
+            }
           />
-          <Route path="/a" component={Admin} />
+          <PrivateRoute path="/a" component={Admin} />
           <Route exact path="/:id" component={ReferralForm} />
         </Switch>
         <Route exact path="/invite/:id" component={InviteFriend} />
         <Route exact path="/disable/:id" component={Disable} />
         <PrivateRoute exact path="/a/invite" component={Invite} />
-        <Route exact path="/a/matches" component={MatchList} />
-        <Route exact path="/a/matches/sent" component={SentMatchList} />
-        <Route exact path="/a/users" component={Users} />
+        <PrivateRoute exact path="/a/matches" component={MatchList} />
+        <PrivateRoute exact path="/a/matches/sent" component={SentMatchList} />
+        <PrivateRoute exact path="/a/users" component={Users} />
       </div>
     );
   }

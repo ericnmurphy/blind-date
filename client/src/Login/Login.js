@@ -1,15 +1,19 @@
 import React, { Component } from "react";
-import { Redirect } from "react-router-dom";
 import { Form, Text } from "informed";
 import axios from "axios";
 
 export default class Login extends Component {
+  state = {
+    loading: false,
+    message: null
+  };
+
   setFormApi = formApi => {
     this.formApi = formApi;
-    //validate via server
   };
 
   handleSubmit = e => {
+    this.setState({ loading: true, message: null });
     axios
       .post("/api/login", {
         username: "sL7MNPUa9rSUXcyWQpqEnwYB",
@@ -24,6 +28,7 @@ export default class Login extends Component {
       })
       .catch(err => {
         console.log(`sign up error: ${err}`);
+        this.setState({ loading: false, message: "Invalid password." });
       });
   };
 
@@ -49,8 +54,15 @@ export default class Login extends Component {
               />
             </div>
             <div className="button">
-              <button type="submit">Login</button>
+              <button disabled={this.state.loading} type="submit">
+                {this.state.loading ? "Logging in . . ." : "Login"}
+              </button>
             </div>
+            {this.state.message && (
+              <div>
+                <p className="error">{this.state.message}</p>
+              </div>
+            )}
           </React.Fragment>
         )}
       </Form>
