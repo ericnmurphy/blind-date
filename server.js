@@ -495,11 +495,14 @@ app.get("/", function(req, res) {
 // email routes
 
 app.post("/api/inbound", (req, res) => {
-  const to = req.body.to;
-  const from = req.body.from;
-  const html = req.body.html;
-  const subject = req.body.subject;
-  const matchId = to.substring(0, to.indexOf("@"));
+  console.log(req.body);
+  console.log(req);
+  console.log(res);
+  // const to = req.body.to;
+  // const from = req.body.from;
+  // const html = req.body.html;
+  // const subject = req.body.subject;
+  // const matchId = to.substring(0, to.indexOf("@"));
 
   // Find match's ID
 
@@ -513,7 +516,6 @@ app.post("/api/inbound", (req, res) => {
       html
     };
     sgMail.send(msg);
-    console.log("sent");
   });
 
   res.send("success");
