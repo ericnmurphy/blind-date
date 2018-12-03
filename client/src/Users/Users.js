@@ -9,7 +9,7 @@ export default class Users extends Component {
   };
 
   componentDidMount() {
-    axios.get("/api/users", {}).then(res => {
+    axios.get("/api/users").then(res => {
       this.setState({
         authenticated: true,
         users: res.data

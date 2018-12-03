@@ -5,6 +5,14 @@ const bodyParser = require("body-parser");
 const nodemailer = require("nodemailer");
 const session = require("express-session");
 const passport = require("passport");
+
+// get env variables
+require("dotenv").config();
+
+// set up sendgrid mail
+const sgMail = require("@sendgrid/mail");
+sgMail.setApiKey(process.env.SENDGRID_API);
+
 // const key = require("./key");
 
 const User = require("./models/User.js");
@@ -321,7 +329,7 @@ app.post("/api/send", (req, res) => {
 
   // setup email data with unicode symbols
   let mailOptions1 = {
-    from: '"Blind Date" <d3dknprfuzhco4pu@ethereal.email>',
+    from: `"Blind Date" <${user2.id}@ifyoureachedthispage.com>`,
     to: req.body.match.user1.email,
     subject: "Blind Date Match",
     text: output1,
@@ -356,7 +364,7 @@ app.post("/api/send", (req, res) => {
 
   // setup email data with unicode symbols
   let mailOptions2 = {
-    from: '"Blind Date" <d3dknprfuzhco4pu@ethereal.email>', // sender address
+    from: `"Blind Date" <${user1.id}@ifyoureachedthispage.com>`,
     to: req.body.match.user2.email, // list of receivers
     subject: "Blind Date Match", // Subject line
     text: output2, // plain text body
@@ -482,6 +490,33 @@ app.get("*", (req, res) => {
 
 app.get("/", function(req, res) {
   req.send(req.session);
+});
+
+// email routes
+
+app.post("/api/inbound", (req, res) => {
+  const to = req.body.to;
+  const from = req.body.from;
+  const html = req.body.html;
+  const subject = req.body.subject;
+  const matchId = to.substring(0, to.indexOf("@"));
+
+  // Find match's ID
+
+  User.findOne({ _id: matchId }, (err, result) => {
+    const recipient = result.email;
+    const msg = {
+      to,
+      from,
+      subject,
+      text: html,
+      html
+    };
+    sgMail.send(msg);
+    console.log("sent");
+  });
+
+  res.send("success");
 });
 
 //use routes
