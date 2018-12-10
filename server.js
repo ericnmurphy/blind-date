@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const nodemailer = require("nodemailer");
 const session = require("express-session");
 const passport = require("passport");
+const request = require("request");
 
 // get env variables
 require("dotenv").config();
@@ -495,30 +496,36 @@ app.get("/", function(req, res) {
 // email routes
 
 app.post("/api/inbound", (req, res) => {
-  console.log(req.body);
-  console.log(req);
-  console.log(res);
-  // const to = req.body.to;
-  // const from = req.body.from;
-  // const html = req.body.html;
-  // const subject = req.body.subject;
-  // const matchId = to.substring(0, to.indexOf("@"));
-
-  // Find match's ID
-
-  User.findOne({ _id: matchId }, (err, result) => {
-    const recipient = result.email;
-    const msg = {
-      to,
-      from,
-      subject,
-      text: html,
-      html
-    };
-    sgMail.send(msg);
+  var url = "http://requestbin.fullcontact.com/1914jmw1";
+  request(url, function(error, response, body) {
+    if (!error) {
+      console.log(body);
+    }
   });
+  // console.log(req.body);
+  // console.log(req);
+  // console.log(res);
+  // // const to = req.body.to;
+  // // const from = req.body.from;
+  // // const html = req.body.html;
+  // // const subject = req.body.subject;
+  // // const matchId = to.substring(0, to.indexOf("@"));
 
-  res.send("success");
+  // // Find match's ID
+
+  // User.findOne({ _id: matchId }, (err, result) => {
+  //   const recipient = result.email;
+  //   const msg = {
+  //     to,
+  //     from,
+  //     subject,
+  //     text: html,
+  //     html
+  //   };
+  //   sgMail.send(msg);
+  // });
+
+  // res.send("success");
 });
 
 //use routes
