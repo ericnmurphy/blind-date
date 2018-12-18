@@ -504,7 +504,7 @@ app.use(
 
 // email routes
 
-app.post("/api/inbound", multer().any(), (req, res) => {
+app.post("/api/inbound", (req, res) => {
   console.log(req.body);
   console.log("body" + req.body);
   res.status(200).json("ok");
