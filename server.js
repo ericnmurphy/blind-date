@@ -495,17 +495,45 @@ app.get("/", function(req, res) {
 
 // email routes
 
-app.post("/api/inbound", (req, res) => {
-  console.log(req.body);
-  const msg = {
-    to: "ericnmurphy@gmail.com",
-    from: "hq@ifyoureachedthispage.com",
-    subject: "Test transaction",
-    text: "This is a test transaction.",
-    html: "This is a test transaction."
-  };
-  sgMail.send(msg);
-  res.sendStatus(200);
+app.post(
+  "/api/inbound",
+  (req, res) => {
+    let envelope;
+    let to;
+    const payload = req.payload;
+
+    console.log(payload);
+
+    if (payload.envelope) {
+      envelope = JSON.parse(payload.envelope);
+    }
+    if (envelope) {
+      to = envelope.from;
+    }
+
+    const Email = sgMail.Email;
+    const email = new Email({
+      to: to,
+      from: "hi@ifyoureachedthispage.com",
+      subject: "Inbound Payload",
+      text:
+        "A payload was just delivered via SendGrid's Inbound Parse API. It should be attached."
+    });
+
+    email.addFile({
+      filename: "payload.txt",
+      content: new Buffer(JSON.stringify(payload))
+    });
+
+    sgMail.send(email, function(err, json) {
+      if (err) {
+        console.error(err);
+        request.reply({ success: false, error: { message: err.message } });
+      } else {
+        request.reply({ success: true });
+      }
+    });
+  }
 
   // console.log(req.body);
   // console.log(req);
@@ -531,7 +559,7 @@ app.post("/api/inbound", (req, res) => {
   // });
 
   // res.send("success");
-});
+);
 
 //use routes
 
