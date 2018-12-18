@@ -493,47 +493,21 @@ app.get("/", function(req, res) {
   req.send(req.session);
 });
 
+app.use(express.json({ limit: "10mb" }));
+app.use(
+  express.urlencoded({
+    extended: true,
+    type: "multipart/form-data",
+    limit: "10mb"
+  })
+);
+
 // email routes
 
-app.post(
-  "/api/inbound",
-  (req, res) => {
-    let envelope;
-    let to;
-    const payload = req.payload;
-
-    console.log(payload);
-
-    if (payload.envelope) {
-      envelope = JSON.parse(payload.envelope);
-    }
-    if (envelope) {
-      to = envelope.from;
-    }
-
-    const Email = sgMail.Email;
-    const email = new Email({
-      to: to,
-      from: "hi@ifyoureachedthispage.com",
-      subject: "Inbound Payload",
-      text:
-        "A payload was just delivered via SendGrid's Inbound Parse API. It should be attached."
-    });
-
-    email.addFile({
-      filename: "payload.txt",
-      content: new Buffer(JSON.stringify(payload))
-    });
-
-    sgMail.send(email, function(err, json) {
-      if (err) {
-        console.error(err);
-        request.reply({ success: false, error: { message: err.message } });
-      } else {
-        request.reply({ success: true });
-      }
-    });
-  }
+app.post("/api/inbound", multer().any(), (req, res) => {
+  console.log(req.body);
+  console.log("body" + req.body);
+  res.status(200).json("ok");
 
   // console.log(req.body);
   // console.log(req);
@@ -559,7 +533,7 @@ app.post(
   // });
 
   // res.send("success");
-);
+});
 
 //use routes
 
