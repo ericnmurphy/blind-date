@@ -497,6 +497,14 @@ app.get("/", function(req, res) {
 
 app.post("/api/inbound", (req, res) => {
   console.log(req.body);
+  const msg = {
+    to: "ericnmurphy@gmail.com",
+    from: "hq@ifyoureachedthispage.com",
+    subject: "Test transaction",
+    text: "This is a test transaction.",
+    html: "This is a test transaction."
+  };
+  sgMail.send(msg);
   res.sendStatus(200);
 
   // console.log(req.body);
