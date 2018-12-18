@@ -506,7 +506,14 @@ app.use(
 
 app.post("/api/inbound", (req, res) => {
   console.log(req.body);
-  console.log("body" + req.body);
+
+  console.log("testtesttesttest");
+  let object = {};
+  req.body.forEach((value, key) => {
+    object[key] = value;
+  });
+  const json = JSON.stringify(object);
+  console.log(json);
   res.status(200).json("ok");
 
   // console.log(req.body);
