@@ -496,12 +496,9 @@ app.get("/", function(req, res) {
 // email routes
 
 app.post("/api/inbound", (req, res) => {
-  var url = "http://requestbin.fullcontact.com/1914jmw1";
-  request(url, function(error, response, body) {
-    if (!error) {
-      console.log(body);
-    }
-  });
+  console.log(req.body);
+  res.sendStatus(200);
+
   // console.log(req.body);
   // console.log(req);
   // console.log(res);
