@@ -6,6 +6,12 @@ const nodemailer = require("nodemailer");
 const session = require("express-session");
 const passport = require("passport");
 const request = require("request");
+const multer = require("multer");
+const upload = multer();
+
+app.configure(() => {
+  app.use(multer());
+});
 
 // get env variables
 require("dotenv").config();
@@ -504,16 +510,9 @@ app.use(
 
 // email routes
 
-app.post("/api/inbound", (req, res) => {
+app.post("/api/inbound", upload.any(), (req, res) => {
   console.log(req.body);
-
   console.log("testtesttesttest");
-  let object = {};
-  req.body.forEach((value, key) => {
-    object[key] = value;
-  });
-  const json = JSON.stringify(object);
-  console.log(json);
   res.status(200).json("ok");
 
   // console.log(req.body);
