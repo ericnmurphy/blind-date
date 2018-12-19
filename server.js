@@ -495,11 +495,11 @@ app.get("/", function(req, res) {
   req.send(req.session);
 });
 
-app.use(multer());
+app.use(multer().any());
 
 // email routes
 
-app.post("/api/inbound", upload.any(), (req, res) => {
+app.post("/api/inbound", (req, res) => {
   console.log(req.body);
   console.log("testtesttesttest");
   res.status(200).json("ok");
