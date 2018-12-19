@@ -495,14 +495,7 @@ app.get("/", function(req, res) {
   req.send(req.session);
 });
 
-app.use(express.json({ limit: "10mb" }));
-app.use(
-  express.urlencoded({
-    extended: true,
-    type: "multipart/form-data",
-    limit: "10mb"
-  })
-);
+app.use(multer());
 
 // email routes
 
