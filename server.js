@@ -9,10 +9,6 @@ const request = require("request");
 const multer = require("multer");
 const upload = multer();
 
-app.configure(() => {
-  app.use(multer());
-});
-
 // get env variables
 require("dotenv").config();
 
@@ -28,6 +24,10 @@ const Admin = require("./models/Admin.js");
 
 const app = express();
 const port = process.env.PORT || 5000;
+
+app.configure(() => {
+  app.use(multer());
+});
 
 app.use(express.static(path.join(__dirname, "client/build")));
 
