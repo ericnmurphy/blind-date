@@ -7,7 +7,7 @@ const session = require("express-session");
 const passport = require("passport");
 const request = require("request");
 const multer = require("multer");
-const upload = multer();
+const simpleParser = require("mailparser").simpleParser;
 
 // get env variables
 require("dotenv").config();
@@ -501,17 +501,19 @@ app.use(multer().any());
 
 app.post("/api/inbound", (req, res) => {
   console.log(req.body);
-  console.log("testtesttesttest");
-  res.status(200).json("ok");
 
-  // console.log(req.body);
-  // console.log(req);
-  // console.log(res);
-  // // const to = req.body.to;
-  // // const from = req.body.from;
-  // // const html = req.body.html;
-  // // const subject = req.body.subject;
-  // // const matchId = to.substring(0, to.indexOf("@"));
+  const to = req.body.to;
+  const from = req.body.from.match(
+    /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
+  )[0];
+  const subject = req.body.subject;
+  const matchId = to.substring(0, to.indexOf("@"));
+
+  simpleParser(req.body.email, (err, parsed) => {
+    console.log(parsed);
+  });
+
+  res.status(200).json("ok");
 
   // // Find match's ID
 
