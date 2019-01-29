@@ -502,34 +502,36 @@ app.use(multer().any());
 app.post("/api/inbound", (req, res) => {
   console.log(req.body);
 
-  const to = req.body.to;
-  const from = req.body.from.match(
+  const message = {};
+
+  message.subject = req.body.subject;
+
+  const recipient = req.body.to;
+  const sender = req.body.from.match(
     /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
   )[0];
-  const subject = req.body.subject;
-  const matchId = to.substring(0, to.indexOf("@"));
+
+  const matchId = recipient.substring(0, recipient.indexOf("@"));
 
   simpleParser(req.body.email, (err, parsed) => {
-    console.log(parsed);
+    message.text = parsed.text;
+    message.html = parsed.html;
+
+    // Find match's ID
+
+    User.findOne({ email: sender }, (err, result) => {
+      console.log(result);
+      message.from = `${result._id}@ifyoureachedthispage.com`;
+
+      User.findOne({ _id: matchId }, (err, result) => {
+        message.to = result.email;
+
+        sgMail.send(message);
+      });
+    });
   });
 
-  res.status(200).json("ok");
-
-  // // Find match's ID
-
-  // User.findOne({ _id: matchId }, (err, result) => {
-  //   const recipient = result.email;
-  //   const msg = {
-  //     to,
-  //     from,
-  //     subject,
-  //     text: html,
-  //     html
-  //   };
-  //   sgMail.send(msg);
-  // });
-
-  // res.send("success");
+  res.status(200).json("finished");
 });
 
 //use routes
